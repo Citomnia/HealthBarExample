@@ -75,7 +75,7 @@ public:
 	void bufferSetUp();
 	void swapchainSetUp();
 	void clearViewport();
-	//XMFLOAT4 colorLerp(XMFLOAT4 colorOne, XMFLOAT4 colorTwo, float ratio);
+	XMFLOAT4 colorLerp(XMFLOAT4 colorOne, XMFLOAT4 colorTwo, float ratio);
 
 	void Init();
 	void Update();

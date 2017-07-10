@@ -1,3 +1,4 @@
-﻿  HealthBarExample.cpp
-  HealthBarExample.vcxproj -> C:\Users\Dennisa Sawyer\Documents\Visual Studio 2015\Projects\HealthBarExample\HealthBarExample\Debug\HealthBarExample.exe
-  HealthBarExample.vcxproj -> C:\Users\Dennisa Sawyer\Documents\Visual Studio 2015\Projects\HealthBarExample\HealthBarExample\Debug\HealthBarExample.pdb (Full PDB)
+﻿  DXApp.cpp
+c:\users\dennisa sawyer\documents\visual studio 2015\projects\healthbarexample\healthbarexample\healthbarexample\dxapp.cpp(25): warning C4244: '=': conversion from 'unsigned int' to 'FLOAT', possible loss of data
+c:\users\dennisa sawyer\documents\visual studio 2015\projects\healthbarexample\healthbarexample\healthbarexample\dxapp.cpp(26): warning C4244: '=': conversion from 'unsigned int' to 'FLOAT', possible loss of data
+LINK : fatal error LNK1104: cannot open file 'C:\Users\Dennisa Sawyer\Documents\Visual Studio 2015\Projects\HealthBarExample\HealthBarExample\Debug\HealthBarExample.ilk'

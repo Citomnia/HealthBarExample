@@ -98,19 +98,19 @@ void DXApp::bufferSetUp()
 	unsigned int width = winSize.right - winSize.left;
 	unsigned int height = winSize.bottom - winSize.top;
 
-	border[0] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.8f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
-	border[1] = SIMPLE_VERTEX(XMFLOAT4(-0.5f, -0.8f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
-	border[2] = SIMPLE_VERTEX(XMFLOAT4(-0.5f, -1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
-	border[3] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
-	border[4] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.8f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	border[0] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	border[1] = SIMPLE_VERTEX(XMFLOAT4(-0.48f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	border[2] = SIMPLE_VERTEX(XMFLOAT4(-0.48f, -0.97f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	border[3] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.97f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	border[4] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
 
 
-	health[0] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.8f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
-	health[1] = SIMPLE_VERTEX(XMFLOAT4(-0.5f, -0.8f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
-	health[2] = SIMPLE_VERTEX(XMFLOAT4(-0.5f, -1.0f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
-	health[3] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.8f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
-	health[4] = SIMPLE_VERTEX(XMFLOAT4(-0.5f, -1.0f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
-	health[5] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -1.0f, 1.0f, 1.0f), XMFLOAT4(1.0, 0.0f, 0.0f, 1.0f));
+	health[0] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
+	health[1] = SIMPLE_VERTEX(XMFLOAT4(-0.48f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
+	health[2] = SIMPLE_VERTEX(XMFLOAT4(-0.48f, -0.97f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
+	health[3] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.90f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
+	health[4] = SIMPLE_VERTEX(XMFLOAT4(-0.48f, -0.97f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
+	health[5] = SIMPLE_VERTEX(XMFLOAT4(-0.98f, -0.97f, 1.0f, 1.0f), XMFLOAT4(0.2f, 0.8f, 0.2f, 1.0f));
 
 
 	CD3D11_BUFFER_DESC outlineVertexBufferDesc;
@@ -187,6 +187,19 @@ void DXApp::clearViewport()
 	deviceContext->RSSetViewports(1, &viewport);
 }
 
+XMFLOAT4 DXApp::colorLerp(XMFLOAT4 colorOne, XMFLOAT4 colorTwo, float ratio)
+{
+	
+	XMFLOAT4 newColor;
+
+	newColor.x = colorOne.x + ratio * (colorTwo.x - colorOne.x);
+	newColor.y = colorOne.y + ratio * (colorTwo.y - colorOne.y);
+	newColor.z = colorOne.z + ratio * (colorTwo.z - colorOne.z);
+	newColor.w = colorOne.w + ratio * (colorTwo.w - colorTwo.w);
+
+	return newColor;
+}
+
 void DXApp::Init()
 {
 	swapchainSetUp();
@@ -259,11 +272,39 @@ void DXApp::Update()
 	//If health changes, affect the health bar
 	if (ratio <= 1)
 	{
-		/*health[1].point.x = border[0].point.x + ratio * (border[1].point.x - border[0].point.x);
-		health[2].point.x = border[0].point.x + ratio * (border[1].point.x - border[0].point.x);
-		*/
+	
 		health[1].point.x = border[0].point.x + ratio * (border[1].point.x - border[0].point.x);
 		health[2].point.x = border[0].point.x + ratio * (border[1].point.x - border[0].point.x);
 		health[4].point.x = border[0].point.x + ratio * (border[1].point.x - border[0].point.x);
+
+		if (ratio > .66f)
+		{
+			health[0].color = colorLerp(yellow, green, ratio);
+			health[1].color = colorLerp(yellow, green, ratio);
+			health[2].color = colorLerp(yellow, green, ratio);
+			health[3].color = colorLerp(yellow, green, ratio);
+			health[4].color = colorLerp(yellow, green, ratio);
+			health[5].color = colorLerp(yellow, green, ratio);
+		}
+
+		if (ratio > .34f && ratio < 0.66f)
+		{
+			health[0].color = colorLerp(bRed, yellow, ratio);
+			health[1].color = colorLerp(bRed, yellow, ratio);
+			health[2].color = colorLerp(bRed, yellow, ratio);
+			health[3].color = colorLerp(bRed, yellow, ratio);
+			health[4].color = colorLerp(bRed, yellow, ratio);
+			health[5].color = colorLerp(bRed, yellow, ratio);
+		}
+
+		if (ratio < .35f)
+		{
+			health[0].color = colorLerp(dRed, bRed, ratio);
+			health[1].color = colorLerp(dRed, bRed, ratio);
+			health[2].color = colorLerp(dRed, bRed, ratio);
+			health[3].color = colorLerp(dRed, bRed, ratio);
+			health[4].color = colorLerp(dRed, bRed, ratio);
+			health[5].color = colorLerp(dRed, bRed, ratio);
+		}
 	}
 }
