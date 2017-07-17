@@ -38,6 +38,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	DXApplication = new DXApp();
 
+	
+
 	// Perform application initialization:
 	if (!InitInstance(hInstance, nCmdShow))
 	{
@@ -111,7 +113,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // Store instance handle in our global variable
 
 	DXApplication->hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+		CW_USEDEFAULT, 0, DXApplication->bufferWidth, DXApplication->bufferHeight, nullptr, nullptr, hInstance, nullptr);
 
 	if (!DXApplication->hWnd)
 	{

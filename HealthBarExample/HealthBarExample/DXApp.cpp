@@ -90,6 +90,32 @@ void DXApp::pipelineInit()
 	deviceContext->IASetInputLayout(healthbarInputLayout.Get());
 }
 
+
+void DXApp::hudInit()
+{
+	hud[0] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.5f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	hud[1] = SIMPLE_VERTEX(XMFLOAT4(-0.15f, -0.5f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	hud[2] = SIMPLE_VERTEX(XMFLOAT4(-0.15f, -1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	hud[3] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -1.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+	hud[4] = SIMPLE_VERTEX(XMFLOAT4(-1.0f, -0.25f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
+
+	CD3D11_BUFFER_DESC hudVertexBufferDesc;
+	ZeroMemory(&hudVertexBufferDesc, sizeof(hudVertexBufferDesc));
+	hudVertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	hudVertexBufferDesc.ByteWidth = sizeof(hud);
+	hudVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	hudVertexBufferDesc.CPUAccessFlags = 0;
+	hudVertexBufferDesc.MiscFlags = 0;
+	hudVertexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA hudVertexBufferData = { 0 };
+	hudVertexBufferData.pSysMem = hud;
+	hudVertexBufferData.SysMemPitch = 0;
+	hudVertexBufferData.SysMemSlicePitch = 0;
+
+	device->CreateBuffer(&hudVertexBufferDesc, &hudVertexBufferData, &hudBuffer);
+}
+
 void DXApp::bufferSetUp()
 {
 	RECT winSize;
@@ -200,10 +226,12 @@ XMFLOAT4 DXApp::colorLerp(XMFLOAT4 colorOne, XMFLOAT4 colorTwo, float ratio)
 	return newColor;
 }
 
+
 void DXApp::Init()
 {
 	swapchainSetUp();
 	bufferSetUp();
+	hudInit();
 
 	viewportInit();
 
@@ -238,6 +266,9 @@ void DXApp::Render()
 	deviceContext->RSSetState(healthbarRasterWireframe.Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	deviceContext->IASetVertexBuffers(0, 1, healthbarOutlineBuffer.GetAddressOf(), &strides, &offset);
+	deviceContext->Draw(5, 0);
+
+	deviceContext->IASetVertexBuffers(0, 1, hudBuffer.GetAddressOf(), &strides, &offset);
 	deviceContext->Draw(5, 0);
 
 	swapchain->Present(1, 0);

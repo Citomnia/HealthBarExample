@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 #include <iostream>
+#include "DDSTextureLoader.h"
 
 #include "VertexShader.csh"
 #include "PixelShader.csh"
@@ -29,6 +30,7 @@ public:
 		}
 	};
 
+
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> healthbarInputLayout;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> healthbarVShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> healthbarPShader;
@@ -39,6 +41,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> healthbarOutlineBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> healthbarInlineBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> healthbarBackgroundBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> hudBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 
 	IDXGISwapChain *swapchain;
@@ -51,7 +54,11 @@ public:
 	DXGI_SWAP_CHAIN_DESC sDesc;
 	D3D11_SUBRESOURCE_DATA data;
 
+	//window variables
 	HWND hWnd;
+	unsigned int bufferWidth = 800;
+	unsigned int bufferHeight = 600;
+
 
 	//Bar Variables
 	SIMPLE_VERTEX border[5];
@@ -68,6 +75,8 @@ public:
 	float currHealth = maxHealth;
 	float ratio;
 
+	//HUD variables
+	SIMPLE_VERTEX hud[5];
 
 	void viewportInit();
 	void pipelineCreation();
@@ -76,6 +85,8 @@ public:
 	void swapchainSetUp();
 	void clearViewport();
 	XMFLOAT4 colorLerp(XMFLOAT4 colorOne, XMFLOAT4 colorTwo, float ratio);
+
+	void hudInit();
 
 	void Init();
 	void Update();
